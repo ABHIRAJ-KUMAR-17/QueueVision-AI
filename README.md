@@ -155,7 +155,7 @@ See [`docs/architecture.md`](docs/architecture.md) for a detailed diagram.
 ### Clone the repository
 
 ```bash
-git clone https://github.com/your-username/QueueVision-AI.git
+git clone https://github.com/ABHIRAJ-KUMAR-17/QueueVision-AI.git
 cd QueueVision-AI
 ```
 
