@@ -1,0 +1,50 @@
+analytics:
+  time_series_interval: 30
+detection:
+  confidence: 0.5
+  input_size: 640
+  iou_threshold: 0.45
+  model_path: models/yolov8n.pt
+output:
+  reports_dir: reports
+  results_dir: results
+  save_annotated_video: true
+  save_heatmap: true
+  video_codec: mp4v
+queue:
+  density_thresholds:
+    high: 0.8
+    low: 0.3
+    medium: 0.6
+  person_area_estimate: 5000
+  roi: null
+tracking:
+  iou_threshold: 0.3
+  max_age: 30
+  max_distance: 100
+  min_hits: 2
+video:
+  max_frames: null
+  target_fps: null
+visualization:
+  bbox_color_in_queue:
+  - 0
+  - 255
+  - 0
+  bbox_color_out_queue:
+  - 200
+  - 200
+  - 200
+  panel_alpha: 0.6
+  roi_color:
+  - 0
+  - 200
+  - 255
+  text_color:
+  - 255
+  - 255
+  - 255
+waiting_time:
+  default_service_time: 2.5
+  max_service_time: 10.0
+  min_service_time: 0.5

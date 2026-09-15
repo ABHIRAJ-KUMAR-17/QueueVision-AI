@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# YOLO cache
+.ultralytics/
+runs/
+
+# Results (not committed – generated per run)
+results/*.mp4
+results/*.avi
+results/*.jpg
+results/*.png
+results/*.csv
+reports/*.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Byte-compiled
+*.pyc
