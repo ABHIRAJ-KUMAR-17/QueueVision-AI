@@ -1,4 +1,4 @@
-﻿# QueueVision AI â€“ Intelligent Queue and Waiting-Time Analyzer
+# QueueVision AI â€“ Intelligent Queue and Waiting-Time Analyzer
 
 > **Computer Vision course evaluation project**
 > Analyzes images and videos of real-world queues using YOLOv8 person detection,
@@ -535,48 +535,51 @@ python -m pytest tests/test_waiting_time.py -v
 
 ## 24. Project Structure
 
-`
+```
 QueueVision-AI/
-|
-|-- README.md                    <- Project overview, install, run, test
-|-- statement.md                 <- Problem statement, scope, target users, features
-|-- requirements.txt             <- Python dependencies
-|-- config.yaml                  <- All tunable parameters
-|-- main.py                      <- CLI entry point and pipeline orchestrator
-|-- setup_roi.py                 <- Interactive ROI selector
-|
-|-- src/
-|   |-- __init__.py
-|   |-- detector.py              <- YOLOv8 person detector
-|   |-- tracker.py               <- IoU + centroid multi-object tracker
-|   |-- queue_analyzer.py        <- ROI filter, density, status classification
-|   |-- waiting_time.py          <- Service-time learning, wait estimation
-|   |-- analytics.py             <- Time-series, CSV, report generation
-|   |-- visualization.py         <- Bounding boxes, panels, heatmap
-|   -- utils.py                 <- Config, logging, helpers
-|
-|-- models/                      <- YOLO weights (auto-downloaded)
-|
-|-- data/
-|   |-- sample_images/           <- Put test images here
-|   -- sample_videos/           <- Put test videos here
-|
-|-- results/                     <- Annotated output, CSVs, heatmap
-|
-|-- reports/                     <- analysis_report.txt
-|
-|-- tests/
-|   |-- __init__.py
-|   |-- conftest.py              <- Shared pytest fixtures
-|   |-- test_detector.py         <- Detection dataclass + edge cases
-|   |-- test_queue.py            <- ROI, density, status, parse_roi
-|   -- test_waiting_time.py     <- Wait estimation, learning, clamping
-|
--- docs/
-    |-- architecture.md          <- Detailed system architecture diagram and data flow
-    |-- uml_diagrams.md          <- Use Case, Class, Sequence, Component, ER diagrams
-    -- requirements.md          <- Full FR (FR-01 to FR-10) and NFR (NFR-01 to NFR-08)
-`
+│
+├── README.md                    <- Project overview, install, run, test
+├── statement.md                 <- Problem statement, scope, target users, features
+├── requirements.txt             <- Python dependencies
+├── config.yaml                  <- All tunable parameters
+├── main.py                      <- CLI entry point and pipeline orchestrator
+├── setup_roi.py                 <- Interactive ROI selector
+│
+├── src/
+│   ├── __init__.py
+│   ├── detector.py              <- YOLOv8 person detector
+│   ├── tracker.py               <- IoU + centroid multi-object tracker
+│   ├── queue_analyzer.py        <- ROI filter, density, status classification
+│   ├── waiting_time.py          <- Service-time learning, wait estimation
+│   ├── analytics.py             <- Time-series, CSV, report generation
+│   ├── visualization.py         <- Bounding boxes, panels, heatmap
+│   └── utils.py                 <- Config, logging, helpers
+│
+├── models/
+│   ├── README.txt
+│   └── yolov8n.pt               <- YOLO weights (auto-downloaded)
+│
+├── data/
+│   ├── sample_images/           <- Put test images here
+│   └── sample_videos/           <- Put test videos here
+│
+├── results/                     <- Annotated output, CSVs, heatmap
+│
+├── reports/
+│   └── analysis_report.txt
+│
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py              <- Shared pytest fixtures
+│   ├── test_detector.py         <- Detection dataclass + edge cases
+│   ├── test_queue.py            <- ROI, density, status, parse_roi
+│   └── test_waiting_time.py     <- Wait estimation, learning, clamping
+│
+└── docs/
+    ├── architecture.md          <- Detailed system architecture diagram and data flow
+    ├── uml_diagrams.md          <- Use Case, Class, Sequence, Component, ER diagrams
+    └── requirements.md          <- Full FR (FR-01 to FR-10) and NFR (NFR-01 to NFR-08)
+```
 
 ---
 
