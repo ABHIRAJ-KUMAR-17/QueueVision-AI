@@ -1,4 +1,4 @@
-# QueueVision AI – Intelligent Queue and Waiting-Time Analyzer
+﻿# QueueVision AI â€“ Intelligent Queue and Waiting-Time Analyzer
 
 > **Computer Vision course evaluation project**
 > Analyzes images and videos of real-world queues using YOLOv8 person detection,
@@ -47,7 +47,7 @@ a video or image of a real-world queue (bank, hospital, cafeteria, etc.) and out
 - CSV reports and a human-readable analysis report
 - Queue density heatmap
 
-Everything runs from the command line — no GUI IDE is required.
+Everything runs from the command line â€” no GUI IDE is required.
 
 ---
 
@@ -100,7 +100,7 @@ no real-time insight.
 
 | NFR | Description |
 |---|---|
-| **Performance** | ≥5 FPS on CPU for 720p input with YOLOv8n; frame skipping configurable |
+| **Performance** | â‰¥5 FPS on CPU for 720p input with YOLOv8n; frame skipping configurable |
 | **Reliability** | All errors logged; no silent crashes; invalid inputs reported clearly |
 | **Usability** | Full CLI interface; `--demo` for zero-setup run; `--help` on all commands |
 | **Maintainability** | 7 decoupled modules with typed interfaces; docstrings on all public APIs |
@@ -134,30 +134,30 @@ See [`docs/requirements.md`](docs/requirements.md) for full NFR specifications.
 
 ```
 Input (Image/Video)
-      │
-      ▼
+      â”‚
+      â–¼
 Person Detection (YOLOv8n)
-      │  List[Detection]
-      ▼
+      â”‚  List[Detection]
+      â–¼
 Multi-Object Tracker (IoU + Centroid)
-      │  List[Track]
-      ▼
+      â”‚  List[Track]
+      â–¼
 Queue Region Analyzer (ROI filter)
-      │  QueueSnapshot
-      ▼
+      â”‚  QueueSnapshot
+      â–¼
 Waiting-Time Estimator
-      │  estimated_wait_min
-      ▼
+      â”‚  estimated_wait_min
+      â–¼
 Analytics Recorder
-      │
-      ├──→ Visualizer → Annotated frame → output video
-      │
-      └──→ CSV + Report Generator
-                 │
-                 ├── results/queue_analysis.csv
-                 ├── results/person_tracking.csv
-                 ├── results/queue_heatmap.png
-                 └── reports/analysis_report.txt
+      â”‚
+      â”œâ”€â”€â†’ Visualizer â†’ Annotated frame â†’ output video
+      â”‚
+      â””â”€â”€â†’ CSV + Report Generator
+                 â”‚
+                 â”œâ”€â”€ results/queue_analysis.csv
+                 â”œâ”€â”€ results/person_tracking.csv
+                 â”œâ”€â”€ results/queue_heatmap.png
+                 â””â”€â”€ reports/analysis_report.txt
 ```
 
 See [`docs/architecture.md`](docs/architecture.md) for a detailed diagram.
@@ -285,7 +285,7 @@ python main.py --video data/sample_videos/queue.mp4 --roi 100,100,800,600
 
 ```bash
 python setup_roi.py --video data/sample_videos/queue.mp4
-# → drag to draw rectangle → press ENTER → ROI saved to config.yaml
+# â†’ drag to draw rectangle â†’ press ENTER â†’ ROI saved to config.yaml
 python main.py --video data/sample_videos/queue.mp4
 ```
 
@@ -301,12 +301,12 @@ python -m pytest tests/ -v
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
-| `--video` | str | — | Path to input video file |
-| `--image` | str | — | Path to input image file |
-| `--demo` | flag | — | Run synthetic demo without input |
+| `--video` | str | â€” | Path to input video file |
+| `--image` | str | â€” | Path to input image file |
+| `--demo` | flag | â€” | Run synthetic demo without input |
 | `--roi` | str | config | Queue ROI: `x1,y1,x2,y2` in pixels |
 | `--model` | str | config | Path to YOLO `.pt` weights |
-| `--confidence` | float | config | Detection confidence threshold (0–1) |
+| `--confidence` | float | config | Detection confidence threshold (0â€“1) |
 | `--config` | str | `config.yaml` | Path to configuration file |
 | `--output` | str | `results/` | Directory for output files |
 
@@ -355,7 +355,7 @@ python main.py --video data/sample_videos/queue.mp4 --config my_config.yaml
 
 - Resolution: 720p or 1080p
 - Queue region clearly visible in frame
-- Camera angle: overhead or 45° diagonal preferred
+- Camera angle: overhead or 45Â° diagonal preferred
 - Adequate lighting (avoid heavy shadows or overexposure)
 
 ---
@@ -391,11 +391,11 @@ time_in_queue_frames, time_in_queue_sec, was_in_queue
 
 ## 18. Queue Detection Methodology
 
-### Step 1 – Person Detection
+### Step 1 â€“ Person Detection
 YOLOv8n runs on each frame and returns bounding boxes for the `person` class only.
 Confidence and IoU thresholds filter out low-quality detections.
 
-### Step 2 – Person Tracking
+### Step 2 â€“ Person Tracking
 Each detection is matched to an existing track using:
 1. **IoU** (Intersection-over-Union) between bounding boxes
 2. **Euclidean centroid distance** as a fallback when IoU is too low
@@ -403,23 +403,23 @@ Each detection is matched to an existing track using:
 Unmatched detections create new tracks with new IDs.
 Tracks that go unmatched for `max_age` frames are removed.
 
-### Step 3 – ROI Filtering
+### Step 3 â€“ ROI Filtering
 A person is counted as **in the queue** only if their bounding-box centre point
 lies within the configured ROI rectangle.
 People outside the ROI (passers-by, staff) are detected and tracked but **not counted**.
 
-### Step 4 – Density & Status
+### Step 4 â€“ Density & Status
 ```
-queue_density = (queue_count × person_area_estimate) / roi_area
+queue_density = (queue_count Ã— person_area_estimate) / roi_area
 ```
 Clamped to [0, 1].
 
 | Density Range | Status |
 |---|---|
-| 0–30% | LOW |
-| 30–60% | MEDIUM |
-| 60–80% | HIGH |
-| 80–100% | CRITICAL |
+| 0â€“30% | LOW |
+| 30â€“60% | MEDIUM |
+| 60â€“80% | HIGH |
+| 80â€“100% | CRITICAL |
 
 Thresholds are configurable in `config.yaml`.
 
@@ -434,7 +434,7 @@ Thresholds are configurable in `config.yaml`.
 ### Algorithm
 
 ```
-Estimated Wait (min) = N_queue × T_service_avg
+Estimated Wait (min) = N_queue Ã— T_service_avg
 
 N_queue        = current number of people in ROI
 T_service_avg  = rolling average of observed service times
@@ -460,7 +460,7 @@ When no observations are available yet, the system falls back to
 ```
 Queue: 10 people
 Avg observed service time: 2.5 min/person
-Estimated wait: 10 × 2.5 = 25 minutes  [ESTIMATE]
+Estimated wait: 10 Ã— 2.5 = 25 minutes  [ESTIMATE]
 ```
 
 ---
@@ -489,7 +489,7 @@ python -m pytest tests/test_waiting_time.py -v
 | `tests/test_queue.py` | ROI membership, density computation, status classification, `parse_roi` |
 | `tests/test_waiting_time.py` | Wait estimation, service-time learning, rolling window, clamping |
 
-> Tests use synthetic data only — no real video or image files required.
+> Tests use synthetic data only â€” no real video or image files required.
 
 ---
 
@@ -535,44 +535,48 @@ python -m pytest tests/test_waiting_time.py -v
 
 ## 24. Project Structure
 
-```
+`
 QueueVision-AI/
-│
-├── README.md                    ← This file
-├── requirements.txt             ← Python dependencies
-├── config.yaml                  ← All tunable parameters
-├── main.py                      ← CLI entry point
-├── setup_roi.py                 ← Interactive ROI selector
-│
-├── src/
-│   ├── __init__.py
-│   ├── detector.py              ← YOLOv8 person detector
-│   ├── tracker.py               ← IoU + centroid multi-object tracker
-│   ├── queue_analyzer.py        ← ROI filter, density, status
-│   ├── waiting_time.py          ← Service-time learning, wait estimation
-│   ├── analytics.py             ← Time-series, CSV, report generation
-│   ├── visualization.py         ← Bounding boxes, panels, heatmap
-│   └── utils.py                 ← Config, logging, helpers
-│
-├── models/                      ← YOLO weights (auto-downloaded)
-│
-├── data/
-│   ├── sample_images/           ← Put test images here
-│   └── sample_videos/           ← Put test videos here
-│
-├── results/                     ← Annotated output, CSVs, heatmap
-│
-├── reports/                     ← analysis_report.txt
-│
-├── tests/
-│   ├── __init__.py
-│   ├── test_detector.py         ← Detection dataclass + edge cases
-│   ├── test_queue.py            ← ROI, density, status, parse_roi
-│   └── test_waiting_time.py     ← Wait estimation, learning, clamping
-│
-└── docs/
-    └── architecture.md          ← Detailed system diagram
-```
+|
+|-- README.md                    <- Project overview, install, run, test
+|-- statement.md                 <- Problem statement, scope, target users, features
+|-- requirements.txt             <- Python dependencies
+|-- config.yaml                  <- All tunable parameters
+|-- main.py                      <- CLI entry point and pipeline orchestrator
+|-- setup_roi.py                 <- Interactive ROI selector
+|
+|-- src/
+|   |-- __init__.py
+|   |-- detector.py              <- YOLOv8 person detector
+|   |-- tracker.py               <- IoU + centroid multi-object tracker
+|   |-- queue_analyzer.py        <- ROI filter, density, status classification
+|   |-- waiting_time.py          <- Service-time learning, wait estimation
+|   |-- analytics.py             <- Time-series, CSV, report generation
+|   |-- visualization.py         <- Bounding boxes, panels, heatmap
+|   -- utils.py                 <- Config, logging, helpers
+|
+|-- models/                      <- YOLO weights (auto-downloaded)
+|
+|-- data/
+|   |-- sample_images/           <- Put test images here
+|   -- sample_videos/           <- Put test videos here
+|
+|-- results/                     <- Annotated output, CSVs, heatmap
+|
+|-- reports/                     <- analysis_report.txt
+|
+|-- tests/
+|   |-- __init__.py
+|   |-- conftest.py              <- Shared pytest fixtures
+|   |-- test_detector.py         <- Detection dataclass + edge cases
+|   |-- test_queue.py            <- ROI, density, status, parse_roi
+|   -- test_waiting_time.py     <- Wait estimation, learning, clamping
+|
+-- docs/
+    |-- architecture.md          <- Detailed system architecture diagram and data flow
+    |-- uml_diagrams.md          <- Use Case, Class, Sequence, Component, ER diagrams
+    -- requirements.md          <- Full FR (FR-01 to FR-10) and NFR (NFR-01 to NFR-08)
+`
 
 ---
 
@@ -585,4 +589,5 @@ QueueVision-AI/
 
 ---
 
-*QueueVision AI – College Computer Vision Project*
+*QueueVision AI â€“ College Computer Vision Project*
+
