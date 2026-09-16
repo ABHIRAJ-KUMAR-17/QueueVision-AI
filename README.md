@@ -12,23 +12,26 @@
 2. [Problem Statement](#2-problem-statement)
 3. [Objectives](#3-objectives)
 4. [Features](#4-features)
-5. [Computer Vision Concepts Used](#5-computer-vision-concepts-used)
-6. [System Architecture](#6-system-architecture)
-7. [Installation](#7-installation)
-8. [Python Version](#8-python-version)
-9. [Virtual Environment Setup](#9-virtual-environment-setup)
-10. [Dependency Installation](#10-dependency-installation)
-11. [Model Setup](#11-model-setup)
-12. [How to Run](#12-how-to-run)
-13. [CLI Arguments](#13-cli-arguments)
-14. [Example Commands](#14-example-commands)
-15. [Input Format](#15-input-format)
-16. [Output Format](#16-output-format)
-17. [Queue Detection Methodology](#17-queue-detection-methodology)
-18. [Waiting-Time Estimation Methodology](#18-waiting-time-estimation-methodology)
-19. [Limitations](#19-limitations)
-20. [Future Improvements](#20-future-improvements)
-21. [Project Structure](#21-project-structure)
+5. [Non-Functional Requirements](#5-non-functional-requirements)
+6. [Computer Vision Concepts Used](#6-computer-vision-concepts-used)
+7. [System Architecture](#7-system-architecture)
+8. [Installation](#8-installation)
+9. [Python Version](#9-python-version)
+10. [Virtual Environment Setup](#10-virtual-environment-setup)
+11. [Dependency Installation](#11-dependency-installation)
+12. [Model Setup](#12-model-setup)
+13. [How to Run](#13-how-to-run)
+14. [CLI Arguments](#14-cli-arguments)
+15. [Example Commands](#15-example-commands)
+16. [Input Format](#16-input-format)
+17. [Output Format](#17-output-format)
+18. [Queue Detection Methodology](#18-queue-detection-methodology)
+19. [Waiting-Time Estimation Methodology](#19-waiting-time-estimation-methodology)
+20. [Testing](#20-testing)
+21. [Documentation & Design Diagrams](#21-documentation--design-diagrams)
+22. [Limitations](#22-limitations)
+23. [Future Improvements](#23-future-improvements)
+24. [Project Structure](#24-project-structure)
 
 ---
 
@@ -93,7 +96,24 @@ no real-time insight.
 
 ---
 
-## 5. Computer Vision Concepts Used
+## 5. Non-Functional Requirements
+
+| NFR | Description |
+|---|---|
+| **Performance** | ≥5 FPS on CPU for 720p input with YOLOv8n; frame skipping configurable |
+| **Reliability** | All errors logged; no silent crashes; invalid inputs reported clearly |
+| **Usability** | Full CLI interface; `--demo` for zero-setup run; `--help` on all commands |
+| **Maintainability** | 7 decoupled modules with typed interfaces; docstrings on all public APIs |
+| **Scalability** | Drop-in support for larger YOLO models (yolov8s/m/l/x) via `config.yaml` |
+| **Security/Privacy** | 100% local processing; no cloud API calls; no images stored |
+| **Testability** | 20+ unit tests; no real video required; `pytest` with shared fixtures |
+| **Resource Efficiency** | Bounded rolling window; fixed heatmap buffer; tracks cleared on age-out |
+
+See [`docs/requirements.md`](docs/requirements.md) for full NFR specifications.
+
+---
+
+## 6. Computer Vision Concepts Used
 
 | Concept | Description | Module |
 |---|---|---|
@@ -110,7 +130,7 @@ no real-time insight.
 
 ---
 
-## 6. System Architecture
+## 7. System Architecture
 
 ```
 Input (Image/Video)
@@ -144,7 +164,7 @@ See [`docs/architecture.md`](docs/architecture.md) for a detailed diagram.
 
 ---
 
-## 7. Installation
+## 8. Installation
 
 ### Prerequisites
 
@@ -161,7 +181,7 @@ cd QueueVision-AI
 
 ---
 
-## 8. Python Version
+## 9. Python Version
 
 This project requires **Python 3.9+**.
 
@@ -173,7 +193,7 @@ python --version
 
 ---
 
-## 9. Virtual Environment Setup
+## 10. Virtual Environment Setup
 
 It is strongly recommended to use a virtual environment.
 
@@ -191,7 +211,7 @@ source venv/bin/activate
 
 ---
 
-## 10. Dependency Installation
+## 11. Dependency Installation
 
 ```bash
 pip install -r requirements.txt
@@ -211,7 +231,7 @@ This installs:
 
 ---
 
-## 11. Model Setup
+## 12. Model Setup
 
 **No manual download is required.**
 
@@ -235,7 +255,7 @@ detection:
 
 ---
 
-## 12. How to Run
+## 13. How to Run
 
 ### Quick demo (no input file needed)
 
@@ -277,7 +297,7 @@ python -m pytest tests/ -v
 
 ---
 
-## 13. CLI Arguments
+## 14. CLI Arguments
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
@@ -294,7 +314,7 @@ python -m pytest tests/ -v
 
 ---
 
-## 14. Example Commands
+## 15. Example Commands
 
 ```bash
 # Demo mode
@@ -324,7 +344,7 @@ python main.py --video data/sample_videos/queue.mp4 --config my_config.yaml
 
 ---
 
-## 15. Input Format
+## 16. Input Format
 
 | Type | Supported Formats |
 |---|---|
@@ -340,7 +360,7 @@ python main.py --video data/sample_videos/queue.mp4 --config my_config.yaml
 
 ---
 
-## 16. Output Format
+## 17. Output Format
 
 All outputs are written to `results/` and `reports/` (configurable via `--output`).
 
@@ -369,7 +389,7 @@ time_in_queue_frames, time_in_queue_sec, was_in_queue
 
 ---
 
-## 17. Queue Detection Methodology
+## 18. Queue Detection Methodology
 
 ### Step 1 – Person Detection
 YOLOv8n runs on each frame and returns bounding boxes for the `person` class only.
@@ -405,7 +425,7 @@ Thresholds are configurable in `config.yaml`.
 
 ---
 
-## 18. Waiting-Time Estimation Methodology
+## 19. Waiting-Time Estimation Methodology
 
 > **IMPORTANT**: All waiting-time values are **ESTIMATES**. They are based on
 > observations of people leaving the queue and statistical averaging.
@@ -445,7 +465,46 @@ Estimated wait: 10 × 2.5 = 25 minutes  [ESTIMATE]
 
 ---
 
-## 19. Limitations
+## 20. Testing
+
+### Run all unit tests
+
+```bash
+python -m pytest tests/ -v
+```
+
+### Run a specific test file
+
+```bash
+python -m pytest tests/test_detector.py -v
+python -m pytest tests/test_queue.py -v
+python -m pytest tests/test_waiting_time.py -v
+```
+
+### Test coverage summary
+
+| Test File | What is Tested |
+|---|---|
+| `tests/test_detector.py` | Detection dataclass, confidence filtering, centroid calculation, edge cases |
+| `tests/test_queue.py` | ROI membership, density computation, status classification, `parse_roi` |
+| `tests/test_waiting_time.py` | Wait estimation, service-time learning, rolling window, clamping |
+
+> Tests use synthetic data only — no real video or image files required.
+
+---
+
+## 21. Documentation & Design Diagrams
+
+| Document | Path | Contents |
+|---|---|---|
+| Project Statement | [`statement.md`](statement.md) | Problem statement, scope, target users, high-level features |
+| System Architecture | [`docs/architecture.md`](docs/architecture.md) | Detailed architecture diagram, module responsibilities, data flow |
+| UML Diagrams | [`docs/uml_diagrams.md`](docs/uml_diagrams.md) | Use Case, Class, Sequence, Component, ER diagrams |
+| Requirements Spec | [`docs/requirements.md`](docs/requirements.md) | Full FR and NFR specifications |
+
+---
+
+## 22. Limitations
 
 - **Overhead camera recommended**: The system assumes people are visible from
   above or at a strong diagonal angle. Front-facing cameras cause occlusion issues.
@@ -461,7 +520,7 @@ Estimated wait: 10 × 2.5 = 25 minutes  [ESTIMATE]
 
 ---
 
-## 20. Future Improvements
+## 23. Future Improvements
 
 - **Perspective correction** for accurate metre-scale queue length
 - **GPU acceleration** with CUDA / TensorRT
@@ -474,7 +533,7 @@ Estimated wait: 10 × 2.5 = 25 minutes  [ESTIMATE]
 
 ---
 
-## 21. Project Structure
+## 24. Project Structure
 
 ```
 QueueVision-AI/
