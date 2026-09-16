@@ -1,4 +1,4 @@
-# QueueVision AI â€“ Intelligent Queue and Waiting-Time Analyzer
+# QueueVision AI “ Intelligent Queue and Waiting-Time Analyzer
 
 > **Computer Vision course evaluation project**
 > Analyzes images and videos of real-world queues using YOLOv8 person detection,
