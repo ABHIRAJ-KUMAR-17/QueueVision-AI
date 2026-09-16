@@ -128,38 +128,43 @@ class QueueAnalytics:
         path = self.results_dir / filename
         series = self.time_series()
 
-        with open(path, "w", newline="", encoding="utf-8") as fh:
-            writer = csv.writer(fh)
-            writer.writerow([
-                "timestamp",
-                "frame_number",
-                "queue_count",
-                "total_detected",
-                "queue_density",
-                "queue_status",
-                "estimated_wait_time_min",
-                "average_wait_time_min",
-                "people_served",
-                "service_rate",
-                "queue_length_px",
-            ])
-            for snap in series:
-                ts = _frame_to_timestamp(snap.frame_number, self.fps)
+        try:
+            with open(path, "w", newline="", encoding="utf-8") as fh:
+                writer = csv.writer(fh)
                 writer.writerow([
-                    ts,
-                    snap.frame_number,
-                    snap.queue_count,
-                    snap.total_detected,
-                    f"{snap.queue_density:.3f}",
-                    snap.queue_status,
-                    f"{snap.estimated_wait_min:.2f}",
-                    f"{snap.average_wait_min:.2f}",
-                    snap.service_rate,   # used as people_served proxy here
-                    f"{snap.service_rate:.2f}",
-                    f"{snap.queue_length_px:.1f}",
+                    "timestamp",
+                    "frame_number",
+                    "queue_count",
+                    "total_detected",
+                    "queue_density",
+                    "queue_status",
+                    "estimated_wait_time_min",
+                    "average_wait_time_min",
+                    "people_served",
+                    "service_rate",
+                    "queue_length_px",
                 ])
-
-        logger.info("Queue analysis CSV saved → %s", path)
+                for snap in series:
+                    ts = _frame_to_timestamp(snap.frame_number, self.fps)
+                    writer.writerow([
+                        ts,
+                        snap.frame_number,
+                        snap.queue_count,
+                        snap.total_detected,
+                        f"{snap.queue_density:.3f}",
+                        snap.queue_status,
+                        f"{snap.estimated_wait_min:.2f}",
+                        f"{snap.average_wait_min:.2f}",
+                        snap.service_rate,
+                        f"{snap.service_rate:.2f}",
+                        f"{snap.queue_length_px:.1f}",
+                    ])
+            logger.info("Queue analysis CSV saved → %s", path)
+        except PermissionError:
+            logger.error(
+                "Cannot write '%s' – file is open in another program "
+                "(Excel / editor). Close it and re-run.", path
+            )
         return path
 
     def save_tracking_csv(
@@ -171,33 +176,38 @@ class QueueAnalytics:
         ensure_dir(self.results_dir)
         path = self.results_dir / filename
 
-        with open(path, "w", newline="", encoding="utf-8") as fh:
-            writer = csv.writer(fh)
-            writer.writerow([
-                "track_id",
-                "entry_frame",
-                "exit_frame",
-                "frames_seen",
-                "time_in_queue_frames",
-                "time_in_queue_sec",
-                "was_in_queue",
-            ])
-            for track in all_tracks:
-                exit_frame = track.last_seen_frame
-                frames_seen = track.age
-                tiq_frames = track.time_in_queue_frames
-                tiq_sec = tiq_frames / self.fps
+        try:
+            with open(path, "w", newline="", encoding="utf-8") as fh:
+                writer = csv.writer(fh)
                 writer.writerow([
-                    track.track_id,
-                    track.first_seen_frame,
-                    exit_frame,
-                    frames_seen,
-                    tiq_frames,
-                    f"{tiq_sec:.2f}",
-                    int(track.queue_entry_frame is not None),
+                    "track_id",
+                    "entry_frame",
+                    "exit_frame",
+                    "frames_seen",
+                    "time_in_queue_frames",
+                    "time_in_queue_sec",
+                    "was_in_queue",
                 ])
-
-        logger.info("Person tracking CSV saved → %s", path)
+                for track in all_tracks:
+                    exit_frame = track.last_seen_frame
+                    frames_seen = track.age
+                    tiq_frames = track.time_in_queue_frames
+                    tiq_sec = tiq_frames / self.fps
+                    writer.writerow([
+                        track.track_id,
+                        track.first_seen_frame,
+                        exit_frame,
+                        frames_seen,
+                        tiq_frames,
+                        f"{tiq_sec:.2f}",
+                        int(track.queue_entry_frame is not None),
+                    ])
+            logger.info("Person tracking CSV saved → %s", path)
+        except PermissionError:
+            logger.error(
+                "Cannot write '%s' – file is open in another program "
+                "(Excel / editor). Close it and re-run.", path
+            )
         return path
 
     # ------------------------------------------------------------------ #

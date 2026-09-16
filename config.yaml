@@ -17,7 +17,11 @@ queue:
     low: 0.3
     medium: 0.6
   person_area_estimate: 5000
-  roi: null
+  roi:
+  - 783
+  - 246
+  - 896
+  - 547
 tracking:
   iou_threshold: 0.3
   max_age: 30
